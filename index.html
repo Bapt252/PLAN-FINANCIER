@@ -274,6 +274,24 @@
             color: #155724;
         }
 
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .auto-save-indicator.show {
+            opacity: 1;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2em;
@@ -320,11 +338,14 @@
         </div>
     </div>
 
+    <!-- Indicateur de sauvegarde automatique -->
+    <div id="autoSaveIndicator" class="auto-save-indicator">💾 Sauvegarde automatique...</div>
+
     <div class="tab-content">
         <!-- ONGLET HYPOTHESES -->
         <div class="tab-pane active" id="hypotheses">
             <div class="alert alert-info">
-                <strong>💡 Instructions :</strong> Remplissez les champs avec vos hypothèses business. Les calculs se mettront à jour automatiquement.
+                <strong>💡 Instructions :</strong> Remplissez les champs avec vos hypothèses business. Les calculs se mettront à jour automatiquement et vos données seront sauvegardées automatiquement.
             </div>
 
             <div class="section">
@@ -542,7 +563,7 @@
         <!-- ONGLET HISTORIQUE -->
         <div class="tab-pane" id="historique">
             <div class="alert alert-info">
-                <strong>📚 Historique des sauvegardes :</strong> Toutes vos configurations sont sauvegardées ici.
+                <strong>📚 Historique des sauvegardes :</strong> Toutes vos configurations sont sauvegardées automatiquement et peuvent être retrouvées ici même après un refresh de page.
             </div>
             
             <div class="section">
@@ -560,6 +581,132 @@
         let historiqueSauvegardes = [];
         let charts = {};
         let nextOffreId = 4;
+
+        // === FONCTIONS DE PERSISTANCE ===
+        
+        // Sauvegarder l'état actuel dans localStorage
+        function saveToLocalStorage() {
+            try {
+                const currentState = {
+                    offres: getOffresActives(),
+                    params: getAllParams(),
+                    historique: historiqueSauvegardes,
+                    nextOffreId: nextOffreId,
+                    lastSaved: new Date().toISOString()
+                };
+                localStorage.setItem('tenex_simulator_state', JSON.stringify(currentState));
+                
+                // Afficher l'indicateur de sauvegarde
+                showAutoSaveIndicator();
+                
+                console.log('État sauvegardé automatiquement');
+            } catch (error) {
+                console.error('Erreur lors de la sauvegarde:', error);
+            }
+        }
+
+        // Charger l'état depuis localStorage
+        function loadFromLocalStorage() {
+            try {
+                const savedState = localStorage.getItem('tenex_simulator_state');
+                if (!savedState) {
+                    console.log('Aucune sauvegarde trouvée, utilisation des valeurs par défaut');
+                    return false;
+                }
+
+                const state = JSON.parse(savedState);
+                
+                // Restaurer les offres
+                if (state.offres) {
+                    restoreOffres(state.offres);
+                }
+                
+                // Restaurer les paramètres
+                if (state.params) {
+                    restoreParams(state.params);
+                }
+                
+                // Restaurer l'historique
+                if (state.historique) {
+                    historiqueSauvegardes = state.historique;
+                    updateHistorique();
+                }
+                
+                // Restaurer nextOffreId
+                if (state.nextOffreId) {
+                    nextOffreId = state.nextOffreId;
+                }
+                
+                console.log('État restauré depuis la sauvegarde du', new Date(state.lastSaved).toLocaleString('fr-FR'));
+                return true;
+            } catch (error) {
+                console.error('Erreur lors du chargement:', error);
+                return false;
+            }
+        }
+
+        // Récupérer tous les paramètres actuels
+        function getAllParams() {
+            return {
+                churn_mensuel: document.getElementById('churn_mensuel').value,
+                budget_marketing: document.getElementById('budget_marketing').value,
+                taux_conversion: document.getElementById('taux_conversion').value,
+                tresorerie_depart: document.getElementById('tresorerie_depart').value,
+                salaire_ceo: document.getElementById('salaire_ceo').value,
+                salaire_cto: document.getElementById('salaire_cto').value,
+                salaire_devs: document.getElementById('salaire_devs').value,
+                salaire_designer: document.getElementById('salaire_designer').value,
+                salaire_marketing: document.getElementById('salaire_marketing').value,
+                charges_sociales_pct: document.getElementById('charges_sociales_pct').value,
+                cout_hebergement: document.getElementById('cout_hebergement').value,
+                cout_db: document.getElementById('cout_db').value,
+                cout_crm: document.getElementById('cout_crm').value,
+                cout_analytics: document.getElementById('cout_analytics').value,
+                cout_support: document.getElementById('cout_support').value,
+                cout_bureau: document.getElementById('cout_bureau').value,
+                charges_variables_pct: document.getElementById('charges_variables_pct').value
+            };
+        }
+
+        // Restaurer tous les paramètres
+        function restoreParams(params) {
+            Object.keys(params).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.value = params[key];
+                }
+            });
+        }
+
+        // Restaurer les offres
+        function restoreOffres(offres) {
+            // Vider le tableau actuel
+            const table = document.getElementById('offresTable');
+            table.innerHTML = '';
+            
+            // Restaurer chaque offre
+            offres.forEach(offre => {
+                const row = table.insertRow();
+                row.innerHTML = `
+                    <td><input type="text" value="${offre.nom}" id="nom_offre_${offre.id}" onchange="updateCalculations()"></td>
+                    <td><input type="number" value="${offre.prix}" id="prix_offre_${offre.id}" onchange="updateCalculations()"></td>
+                    <td><input type="number" value="${offre.clientsActuels}" id="clients_actuels_offre_${offre.id}" onchange="updateCalculations()"></td>
+                    <td><input type="number" value="${offre.objectif}" id="objectif_offre_${offre.id}" onchange="updateCalculations()"></td>
+                    <td><button class="btn btn-secondary" onclick="supprimerOffre(${offre.id})">🗑️</button></td>
+                `;
+            });
+        }
+
+        // Afficher l'indicateur de sauvegarde automatique
+        function showAutoSaveIndicator() {
+            const indicator = document.getElementById('autoSaveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // === FONCTIONS PRINCIPALES ===
 
         // Fonction pour obtenir les offres actives
         function getOffresActives() {
@@ -728,6 +875,9 @@
 
             updateSimulationTable();
             updateKPI();
+            
+            // Sauvegarde automatique après chaque modification
+            saveToLocalStorage();
         }
 
         // Mettre à jour le tableau de simulation
@@ -822,7 +972,7 @@
                 }
             });
 
-            // Autres graphiques similaires...
+            // Graphique Marge
             if (charts.marge) charts.marge.destroy();
             const ctxMarge = document.getElementById('margeChart').getContext('2d');
             charts.marge = new Chart(ctxMarge, {
@@ -850,6 +1000,7 @@
                 }
             });
 
+            // Graphique Clients
             if (charts.clients) charts.clients.destroy();
             const ctxClients = document.getElementById('clientsChart').getContext('2d');
             charts.clients = new Chart(ctxClients, {
@@ -871,6 +1022,7 @@
                 }
             });
 
+            // Graphique Cash Flow
             if (charts.cash) charts.cash.destroy();
             const ctxCash = document.getElementById('cashChart').getContext('2d');
             charts.cash = new Chart(ctxCash, {
@@ -906,6 +1058,7 @@
             const config = {
                 date: new Date().toLocaleString('fr-FR'),
                 offres: getOffresActives(),
+                params: getAllParams(),
                 simulation: simulationData
             };
             historiqueSauvegardes.unshift(config);
@@ -913,7 +1066,8 @@
                 historiqueSauvegardes.pop();
             }
             updateHistorique();
-            alert('💾 Configuration sauvegardée !');
+            saveToLocalStorage(); // Sauvegarder aussi dans localStorage
+            alert('💾 Configuration sauvegardée manuellement !');
         }
 
         function updateHistorique() {
@@ -944,7 +1098,13 @@
         function exportData() {
             const data = {
                 date: new Date().toISOString(),
-                historique: historiqueSauvegardes
+                version: '1.1',
+                etat_complet: {
+                    offres: getOffresActives(),
+                    params: getAllParams(),
+                    historique: historiqueSauvegardes,
+                    simulation: simulationData
+                }
             };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -966,13 +1126,30 @@
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    if (data.historique) {
+                    
+                    // Import complet si disponible
+                    if (data.etat_complet) {
+                        if (data.etat_complet.offres) {
+                            restoreOffres(data.etat_complet.offres);
+                        }
+                        if (data.etat_complet.params) {
+                            restoreParams(data.etat_complet.params);
+                        }
+                        if (data.etat_complet.historique) {
+                            historiqueSauvegardes = data.etat_complet.historique;
+                            updateHistorique();
+                        }
+                    }
+                    // Import historique seulement (ancienne version)
+                    else if (data.historique) {
                         historiqueSauvegardes = data.historique;
                         updateHistorique();
                     }
+                    
+                    updateCalculations();
                     alert('📤 Import réussi !');
                 } catch (error) {
-                    alert('❌ Erreur lors de l\'import');
+                    alert('❌ Erreur lors de l\'import: ' + error.message);
                 }
             };
             reader.readAsText(file);
@@ -980,7 +1157,22 @@
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
+            // Charger l'état sauvegardé ou utiliser les valeurs par défaut
+            const loaded = loadFromLocalStorage();
+            
+            if (loaded) {
+                console.log('✅ Données restaurées depuis la sauvegarde automatique');
+            } else {
+                console.log('ℹ️ Démarrage avec les valeurs par défaut');
+            }
+            
+            // Lancer les calculs initiaux
             updateCalculations();
+        });
+
+        // Sauvegarder avant la fermeture de la page
+        window.addEventListener('beforeunload', function() {
+            saveToLocalStorage();
         });
     </script>
 </body>
