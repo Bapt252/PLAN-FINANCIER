@@ -461,70 +461,129 @@
 
             <div class="section">
                 <h3>👨‍💻 Équipe & Salaires (€/mois)</h3>
+                <div class="alert alert-info">
+                    <strong>💡 Charges modulables :</strong> Ajoutez, modifiez ou supprimez des postes selon vos besoins.
+                </div>
                 <table class="table">
                     <thead>
                         <tr style="background: #28a745; color: white;">
                             <th>Poste</th>
                             <th>Montant mensuel (€)</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="salairesTable">
                         <tr>
-                            <td>CEO/Founder</td>
-                            <td><input type="number" value="3500" id="salaire_ceo" onchange="updateCalculations()"></td>
+                            <td><input type="text" value="CEO/Founder" id="nom_salaire_1"></td>
+                            <td><input type="number" value="3500" id="montant_salaire_1" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('salairesTable', 1)">🗑️</button></td>
                         </tr>
                         <tr>
-                            <td>CTO/Dev Lead</td>
-                            <td><input type="number" value="4500" id="salaire_cto" onchange="updateCalculations()"></td>
+                            <td><input type="text" value="CTO/Dev Lead" id="nom_salaire_2"></td>
+                            <td><input type="number" value="4500" id="montant_salaire_2" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('salairesTable', 2)">🗑️</button></td>
                         </tr>
                         <tr>
-                            <td>Développeur(s)</td>
-                            <td><input type="number" value="6000" id="salaire_devs" onchange="updateCalculations()"></td>
+                            <td><input type="text" value="Développeur(s)" id="nom_salaire_3"></td>
+                            <td><input type="number" value="6000" id="montant_salaire_3" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('salairesTable', 3)">🗑️</button></td>
                         </tr>
                         <tr>
-                            <td>UI/UX Designer</td>
-                            <td><input type="number" value="3200" id="salaire_designer" onchange="updateCalculations()"></td>
+                            <td><input type="text" value="UI/UX Designer" id="nom_salaire_4"></td>
+                            <td><input type="number" value="3200" id="montant_salaire_4" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('salairesTable', 4)">🗑️</button></td>
                         </tr>
                         <tr>
-                            <td>Marketing/Growth</td>
-                            <td><input type="number" value="3500" id="salaire_marketing" onchange="updateCalculations()"></td>
+                            <td><input type="text" value="Marketing/Growth" id="nom_salaire_5"></td>
+                            <td><input type="number" value="3500" id="montant_salaire_5" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('salairesTable', 5)">🗑️</button></td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="form-group" style="max-width: 300px;">
-                    <label>Charges sociales (%)</label>
-                    <input type="number" id="charges_sociales_pct" value="45" step="0.1" onchange="updateCalculations()">
+                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                    <button class="btn btn-primary" onclick="ajouterCharge('salairesTable', 'salaire')">➕ Ajouter un poste</button>
+                    <label style="margin-left: 20px;">
+                        Charges sociales (%):
+                        <input type="number" id="charges_sociales_pct" value="45" step="0.1" onchange="updateCalculations()" style="width: 80px; margin-left: 10px;">
+                    </label>
                 </div>
             </div>
 
             <div class="section">
-                <h3>🔧 Outils & Services (€/mois)</h3>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Hébergement (AWS/OVH)</label>
-                        <input type="number" value="450" id="cout_hebergement" onchange="updateCalculations()">
-                    </div>
-                    <div class="form-group">
-                        <label>Base de données</label>
-                        <input type="number" value="150" id="cout_db" onchange="updateCalculations()">
-                    </div>
-                    <div class="form-group">
-                        <label>CRM (HubSpot/Pipedrive)</label>
-                        <input type="number" value="89" id="cout_crm" onchange="updateCalculations()">
-                    </div>
-                    <div class="form-group">
-                        <label>Analytics (Mixpanel/Amplitude)</label>
-                        <input type="number" value="199" id="cout_analytics" onchange="updateCalculations()">
-                    </div>
-                    <div class="form-group">
-                        <label>Support client (Intercom)</label>
-                        <input type="number" value="79" id="cout_support" onchange="updateCalculations()">
-                    </div>
-                    <div class="form-group">
-                        <label>Bureau/Coworking</label>
-                        <input type="number" value="800" id="cout_bureau" onchange="updateCalculations()">
-                    </div>
-                </div>
+                <h3>🔧 Outils & Logiciels (€/mois)</h3>
+                <table class="table">
+                    <thead>
+                        <tr style="background: #6f42c1; color: white;">
+                            <th>Outil/Service</th>
+                            <th>Montant mensuel (€)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="outilsTable">
+                        <tr>
+                            <td><input type="text" value="Hébergement (AWS/OVH)" id="nom_outil_1"></td>
+                            <td><input type="number" value="450" id="montant_outil_1" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('outilsTable', 1)">🗑️</button></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="Base de données" id="nom_outil_2"></td>
+                            <td><input type="number" value="150" id="montant_outil_2" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('outilsTable', 2)">🗑️</button></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="CRM (HubSpot/Pipedrive)" id="nom_outil_3"></td>
+                            <td><input type="number" value="89" id="montant_outil_3" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('outilsTable', 3)">🗑️</button></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="Analytics (Mixpanel/Amplitude)" id="nom_outil_4"></td>
+                            <td><input type="number" value="199" id="montant_outil_4" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('outilsTable', 4)">🗑️</button></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="Support client (Intercom)" id="nom_outil_5"></td>
+                            <td><input type="number" value="79" id="montant_outil_5" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('outilsTable', 5)">🗑️</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" onclick="ajouterCharge('outilsTable', 'outil')">➕ Ajouter un outil</button>
+            </div>
+
+            <div class="section">
+                <h3>🏢 Frais généraux (€/mois)</h3>
+                <table class="table">
+                    <thead>
+                        <tr style="background: #fd7e14; color: white;">
+                            <th>Frais</th>
+                            <th>Montant mensuel (€)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fraisTable">
+                        <tr>
+                            <td><input type="text" value="Bureau/Coworking" id="nom_frais_1"></td>
+                            <td><input type="number" value="800" id="montant_frais_1" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('fraisTable', 1)">🗑️</button></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="Internet & Télécom" id="nom_frais_2"></td>
+                            <td><input type="number" value="120" id="montant_frais_2" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('fraisTable', 2)">🗑️</button></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="Assurances" id="nom_frais_3"></td>
+                            <td><input type="number" value="180" id="montant_frais_3" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('fraisTable', 3)">🗑️</button></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" value="Juridique/Expert-comptable" id="nom_frais_4"></td>
+                            <td><input type="number" value="350" id="montant_frais_4" onchange="updateCalculations()"></td>
+                            <td><button class="btn btn-secondary" onclick="supprimerCharge('fraisTable', 4)">🗑️</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" onclick="ajouterCharge('fraisTable', 'frais')">➕ Ajouter des frais</button>
             </div>
 
             <div class="section">
@@ -532,7 +591,7 @@
                 <div class="form-group" style="max-width: 300px;">
                     <label>Charges variables indexées (% CA)</label>
                     <input type="number" id="charges_variables_pct" value="15" step="0.1" onchange="updateCalculations()">
-                    <small style="color: #666;">Ex: commissions, frais bancaires</small>
+                    <small style="color: #666;">Ex: commissions, frais bancaires, hébergement additionnel</small>
                 </div>
             </div>
         </div>
@@ -631,6 +690,7 @@
         let historiqueSauvegardes = [];
         let charts = {};
         let nextOffreId = 4;
+        let nextChargeId = { salaire: 6, outil: 6, frais: 5 }; // Pour les nouvelles charges
 
         // === FONCTIONS DE PARTAGE URL ===
         
@@ -639,8 +699,9 @@
             try {
                 const currentState = {
                     offres: getOffresActives(),
+                    charges: getAllCharges(),
                     params: getAllParams(),
-                    v: '1.2' // Version pour compatibilité
+                    v: '1.3' // Version pour compatibilité
                 };
                 
                 // Encoder en base64 pour l'URL
@@ -726,6 +787,11 @@
                     nextOffreId = maxId + 1;
                 }
                 
+                // Restaurer les charges
+                if (state.charges) {
+                    restoreCharges(state.charges);
+                }
+                
                 // Restaurer les paramètres
                 if (state.params) {
                     restoreParams(state.params);
@@ -758,9 +824,11 @@
             try {
                 const currentState = {
                     offres: getOffresActives(),
+                    charges: getAllCharges(),
                     params: getAllParams(),
                     historique: historiqueSauvegardes,
                     nextOffreId: nextOffreId,
+                    nextChargeId: nextChargeId,
                     lastSaved: new Date().toISOString()
                 };
                 localStorage.setItem('tenex_simulator_state', JSON.stringify(currentState));
@@ -790,6 +858,11 @@
                     restoreOffres(state.offres);
                 }
                 
+                // Restaurer les charges
+                if (state.charges) {
+                    restoreCharges(state.charges);
+                }
+                
                 // Restaurer les paramètres
                 if (state.params) {
                     restoreParams(state.params);
@@ -801,9 +874,12 @@
                     updateHistorique();
                 }
                 
-                // Restaurer nextOffreId
+                // Restaurer les IDs
                 if (state.nextOffreId) {
                     nextOffreId = state.nextOffreId;
+                }
+                if (state.nextChargeId) {
+                    nextChargeId = state.nextChargeId;
                 }
                 
                 console.log('État restauré depuis localStorage du', new Date(state.lastSaved).toLocaleString('fr-FR'));
@@ -814,6 +890,101 @@
             }
         }
 
+        // Récupérer toutes les charges actuelles
+        function getAllCharges() {
+            const charges = {
+                salaires: [],
+                outils: [],
+                frais: []
+            };
+
+            // Récupérer les salaires
+            const salairesTable = document.getElementById('salairesTable');
+            Array.from(salairesTable.rows).forEach(row => {
+                const nomInput = row.querySelector('input[id^="nom_salaire_"]');
+                const montantInput = row.querySelector('input[id^="montant_salaire_"]');
+                if (nomInput && montantInput) {
+                    charges.salaires.push({
+                        id: nomInput.id.split('_').pop(),
+                        nom: nomInput.value,
+                        montant: parseFloat(montantInput.value) || 0
+                    });
+                }
+            });
+
+            // Récupérer les outils
+            const outilsTable = document.getElementById('outilsTable');
+            Array.from(outilsTable.rows).forEach(row => {
+                const nomInput = row.querySelector('input[id^="nom_outil_"]');
+                const montantInput = row.querySelector('input[id^="montant_outil_"]');
+                if (nomInput && montantInput) {
+                    charges.outils.push({
+                        id: nomInput.id.split('_').pop(),
+                        nom: nomInput.value,
+                        montant: parseFloat(montantInput.value) || 0
+                    });
+                }
+            });
+
+            // Récupérer les frais
+            const fraisTable = document.getElementById('fraisTable');
+            Array.from(fraisTable.rows).forEach(row => {
+                const nomInput = row.querySelector('input[id^="nom_frais_"]');
+                const montantInput = row.querySelector('input[id^="montant_frais_"]');
+                if (nomInput && montantInput) {
+                    charges.frais.push({
+                        id: nomInput.id.split('_').pop(),
+                        nom: nomInput.value,
+                        montant: parseFloat(montantInput.value) || 0
+                    });
+                }
+            });
+
+            return charges;
+        }
+
+        // Restaurer toutes les charges
+        function restoreCharges(charges) {
+            if (charges.salaires) {
+                const salairesTable = document.getElementById('salairesTable');
+                salairesTable.innerHTML = '';
+                charges.salaires.forEach(charge => {
+                    const row = salairesTable.insertRow();
+                    row.innerHTML = `
+                        <td><input type="text" value="${charge.nom}" id="nom_salaire_${charge.id}"></td>
+                        <td><input type="number" value="${charge.montant}" id="montant_salaire_${charge.id}" onchange="updateCalculations()"></td>
+                        <td><button class="btn btn-secondary" onclick="supprimerCharge('salairesTable', ${charge.id})">🗑️</button></td>
+                    `;
+                });
+            }
+
+            if (charges.outils) {
+                const outilsTable = document.getElementById('outilsTable');
+                outilsTable.innerHTML = '';
+                charges.outils.forEach(charge => {
+                    const row = outilsTable.insertRow();
+                    row.innerHTML = `
+                        <td><input type="text" value="${charge.nom}" id="nom_outil_${charge.id}"></td>
+                        <td><input type="number" value="${charge.montant}" id="montant_outil_${charge.id}" onchange="updateCalculations()"></td>
+                        <td><button class="btn btn-secondary" onclick="supprimerCharge('outilsTable', ${charge.id})">🗑️</button></td>
+                    `;
+                });
+            }
+
+            if (charges.frais) {
+                const fraisTable = document.getElementById('fraisTable');
+                fraisTable.innerHTML = '';
+                charges.frais.forEach(charge => {
+                    const row = fraisTable.insertRow();
+                    row.innerHTML = `
+                        <td><input type="text" value="${charge.nom}" id="nom_frais_${charge.id}"></td>
+                        <td><input type="number" value="${charge.montant}" id="montant_frais_${charge.id}" onchange="updateCalculations()"></td>
+                        <td><button class="btn btn-secondary" onclick="supprimerCharge('fraisTable', ${charge.id})">🗑️</button></td>
+                    `;
+                });
+            }
+        }
+
         // Récupérer tous les paramètres actuels
         function getAllParams() {
             return {
@@ -821,18 +992,7 @@
                 budget_marketing: document.getElementById('budget_marketing').value,
                 taux_conversion: document.getElementById('taux_conversion').value,
                 tresorerie_depart: document.getElementById('tresorerie_depart').value,
-                salaire_ceo: document.getElementById('salaire_ceo').value,
-                salaire_cto: document.getElementById('salaire_cto').value,
-                salaire_devs: document.getElementById('salaire_devs').value,
-                salaire_designer: document.getElementById('salaire_designer').value,
-                salaire_marketing: document.getElementById('salaire_marketing').value,
                 charges_sociales_pct: document.getElementById('charges_sociales_pct').value,
-                cout_hebergement: document.getElementById('cout_hebergement').value,
-                cout_db: document.getElementById('cout_db').value,
-                cout_crm: document.getElementById('cout_crm').value,
-                cout_analytics: document.getElementById('cout_analytics').value,
-                cout_support: document.getElementById('cout_support').value,
-                cout_bureau: document.getElementById('cout_bureau').value,
                 charges_variables_pct: document.getElementById('charges_variables_pct').value
             };
         }
@@ -902,7 +1062,7 @@
             return offres;
         }
 
-        // Ajouter/supprimer une offre
+        // Ajouter une offre
         function ajouterOffre() {
             const table = document.getElementById('offresTable');
             const row = table.insertRow();
@@ -918,8 +1078,37 @@
             updateCalculations();
         }
 
+        // Supprimer une offre
         function supprimerOffre(id) {
             const row = document.getElementById(`nom_offre_${id}`).closest('tr');
+            row.remove();
+            updateCalculations();
+        }
+
+        // Ajouter une charge
+        function ajouterCharge(tableId, type) {
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            const row = table.insertRow();
+            const id = nextChargeId[type]++;
+            
+            row.innerHTML = `
+                <td><input type="text" value="Nouveau ${type}" id="nom_${type}_${id}"></td>
+                <td><input type="number" value="100" id="montant_${type}_${id}" onchange="updateCalculations()"></td>
+                <td><button class="btn btn-secondary" onclick="supprimerCharge('${tableId}', ${id})">🗑️</button></td>
+            `;
+            
+            updateCalculations();
+        }
+
+        // Supprimer une charge
+        function supprimerCharge(tableId, id) {
+            const tables = {
+                'salairesTable': 'salaire',
+                'outilsTable': 'outil', 
+                'fraisTable': 'frais'
+            };
+            const type = tables[tableId];
+            const row = document.getElementById(`nom_${type}_${id}`).closest('tr');
             row.remove();
             updateCalculations();
         }
@@ -943,25 +1132,51 @@
 
         // Calculer les charges fixes
         function calculateChargesFixes() {
-            const salaires = 
-                (parseFloat(document.getElementById('salaire_ceo').value) || 0) +
-                (parseFloat(document.getElementById('salaire_cto').value) || 0) +
-                (parseFloat(document.getElementById('salaire_devs').value) || 0) +
-                (parseFloat(document.getElementById('salaire_designer').value) || 0) +
-                (parseFloat(document.getElementById('salaire_marketing').value) || 0);
+            // Salaires équipe
+            let totalSalaires = 0;
+            const salairesTable = document.getElementById('salairesTable');
+            const salairesRows = salairesTable.getElementsByTagName('tr');
             
-            const chargesSociales = salaires * ((parseFloat(document.getElementById('charges_sociales_pct').value) || 0) / 100);
-            const totalSalaires = salaires + chargesSociales;
+            for (let i = 0; i < salairesRows.length; i++) {
+                const montantInput = salairesRows[i].querySelector('input[id^="montant_salaire_"]');
+                if (montantInput) {
+                    totalSalaires += parseFloat(montantInput.value) || 0;
+                }
+            }
+            
+            const chargesSociales = totalSalaires * ((parseFloat(document.getElementById('charges_sociales_pct').value) || 0) / 100);
+            const totalSalairesAvecCharges = totalSalaires + chargesSociales;
 
-            const outilsServices = 
-                (parseFloat(document.getElementById('cout_hebergement').value) || 0) +
-                (parseFloat(document.getElementById('cout_db').value) || 0) +
-                (parseFloat(document.getElementById('cout_crm').value) || 0) +
-                (parseFloat(document.getElementById('cout_analytics').value) || 0) +
-                (parseFloat(document.getElementById('cout_support').value) || 0) +
-                (parseFloat(document.getElementById('cout_bureau').value) || 0);
+            // Outils & logiciels
+            let outilsLogiciels = 0;
+            const outilsTable = document.getElementById('outilsTable');
+            const outilsRows = outilsTable.getElementsByTagName('tr');
+            
+            for (let i = 0; i < outilsRows.length; i++) {
+                const montantInput = outilsRows[i].querySelector('input[id^="montant_outil_"]');
+                if (montantInput) {
+                    outilsLogiciels += parseFloat(montantInput.value) || 0;
+                }
+            }
 
-            return totalSalaires + outilsServices;
+            // Frais généraux
+            let fraisGeneraux = 0;
+            const fraisTable = document.getElementById('fraisTable');
+            const fraisRows = fraisTable.getElementsByTagName('tr');
+            
+            for (let i = 0; i < fraisRows.length; i++) {
+                const montantInput = fraisRows[i].querySelector('input[id^="montant_frais_"]');
+                if (montantInput) {
+                    fraisGeneraux += parseFloat(montantInput.value) || 0;
+                }
+            }
+
+            return {
+                totalSalaires: totalSalairesAvecCharges,
+                outilsLogiciels,
+                fraisGeneraux,
+                total: totalSalairesAvecCharges + outilsLogiciels + fraisGeneraux
+            };
         }
 
         // Calculer l'ARPU moyen
@@ -1026,7 +1241,7 @@
                 });
 
                 const chargesVariables = caMensuel * params.chargesVariablesPct;
-                const chargesTotales = chargesFixes + chargesVariables + params.budgetMarketing;
+                const chargesTotales = chargesFixes.total + chargesVariables + params.budgetMarketing;
                 const resultatNet = caMensuel - chargesTotales;
                 tresorerie += resultatNet;
 
@@ -1227,6 +1442,7 @@
             const config = {
                 date: new Date().toLocaleString('fr-FR'),
                 offres: getOffresActives(),
+                charges: getAllCharges(),
                 params: getAllParams(),
                 simulation: simulationData
             };
@@ -1267,9 +1483,10 @@
         function exportData() {
             const data = {
                 date: new Date().toISOString(),
-                version: '1.2',
+                version: '1.3',
                 etat_complet: {
                     offres: getOffresActives(),
+                    charges: getAllCharges(),
                     params: getAllParams(),
                     historique: historiqueSauvegardes,
                     simulation: simulationData
@@ -1300,6 +1517,9 @@
                     if (data.etat_complet) {
                         if (data.etat_complet.offres) {
                             restoreOffres(data.etat_complet.offres);
+                        }
+                        if (data.etat_complet.charges) {
+                            restoreCharges(data.etat_complet.charges);
                         }
                         if (data.etat_complet.params) {
                             restoreParams(data.etat_complet.params);
