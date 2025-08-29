@@ -76,6 +76,7 @@
             display: flex;
             gap: 10px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -85,6 +86,7 @@
             cursor: pointer;
             font-weight: 500;
             transition: all 0.3s;
+            white-space: nowrap;
         }
 
         .btn-primary {
@@ -100,6 +102,11 @@
         .btn-success {
             background: #28a745;
             color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
         }
 
         .btn:hover {
@@ -274,6 +281,12 @@
             color: #155724;
         }
 
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+        }
+
         .auto-save-indicator {
             position: fixed;
             bottom: 20px;
@@ -290,6 +303,27 @@
 
         .auto-save-indicator.show {
             opacity: 1;
+        }
+
+        .share-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .share-url {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            max-height: 100px;
+            overflow-y: auto;
+            margin: 10px 0;
         }
 
         @media (max-width: 768px) {
@@ -314,6 +348,10 @@
             .charts-grid {
                 grid-template-columns: 1fr;
             }
+
+            .save-controls {
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -332,6 +370,7 @@
         </div>
         <div class="save-controls">
             <button class="btn btn-success" onclick="sauvegarder()">💾 Sauvegarder</button>
+            <button class="btn btn-warning" onclick="generateShareLink()">🔗 Partager</button>
             <button class="btn btn-primary" onclick="exportData()">📥 Exporter</button>
             <input type="file" id="importFile" accept=".json" style="display: none" onchange="importData(event)">
             <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📤 Importer</button>
@@ -346,6 +385,17 @@
         <div class="tab-pane active" id="hypotheses">
             <div class="alert alert-info">
                 <strong>💡 Instructions :</strong> Remplissez les champs avec vos hypothèses business. Les calculs se mettront à jour automatiquement et vos données seront sauvegardées automatiquement.
+            </div>
+
+            <!-- Section de partage -->
+            <div class="share-section" id="shareSection" style="display: none;">
+                <h4>🔗 Lien de partage généré</h4>
+                <p>Copiez ce lien pour accéder à votre configuration depuis n'importe quel ordinateur :</p>
+                <div class="share-url" id="shareUrl"></div>
+                <div style="margin-top: 10px;">
+                    <button class="btn btn-primary" onclick="copyShareLink()">📋 Copier le lien</button>
+                    <button class="btn btn-secondary" onclick="hideShareSection()">✖ Fermer</button>
+                </div>
             </div>
 
             <div class="section">
@@ -582,7 +632,126 @@
         let charts = {};
         let nextOffreId = 4;
 
-        // === FONCTIONS DE PERSISTANCE ===
+        // === FONCTIONS DE PARTAGE URL ===
+        
+        // Générer un lien de partage avec toutes les données
+        function generateShareLink() {
+            try {
+                const currentState = {
+                    offres: getOffresActives(),
+                    params: getAllParams(),
+                    v: '1.2' // Version pour compatibilité
+                };
+                
+                // Encoder en base64 pour l'URL
+                const encodedData = btoa(JSON.stringify(currentState));
+                
+                // Créer l'URL complète
+                const baseUrl = window.location.origin + window.location.pathname;
+                const shareUrl = `${baseUrl}?config=${encodedData}`;
+                
+                // Afficher la section de partage
+                document.getElementById('shareUrl').textContent = shareUrl;
+                document.getElementById('shareSection').style.display = 'block';
+                
+                // Scroll vers la section
+                document.getElementById('shareSection').scrollIntoView({ behavior: 'smooth' });
+                
+                console.log('Lien de partage généré');
+            } catch (error) {
+                alert('Erreur lors de la génération du lien : ' + error.message);
+                console.error('Erreur génération lien:', error);
+            }
+        }
+        
+        // Copier le lien de partage
+        function copyShareLink() {
+            const shareUrl = document.getElementById('shareUrl').textContent;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareUrl).then(() => {
+                    alert('Lien copié dans le presse-papiers !');
+                }).catch(() => {
+                    // Fallback si clipboard API ne fonctionne pas
+                    copyToClipboardFallback(shareUrl);
+                });
+            } else {
+                copyToClipboardFallback(shareUrl);
+            }
+        }
+        
+        // Fallback pour copier le lien
+        function copyToClipboardFallback(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                alert('Lien copié dans le presse-papiers !');
+            } catch (err) {
+                alert('Impossible de copier automatiquement. Sélectionnez le texte et copiez-le manuellement.');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        // Masquer la section de partage
+        function hideShareSection() {
+            document.getElementById('shareSection').style.display = 'none';
+        }
+        
+        // Charger la configuration depuis l'URL
+        function loadFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const configParam = urlParams.get('config');
+            
+            if (!configParam) {
+                return false;
+            }
+            
+            try {
+                // Décoder depuis base64
+                const decodedData = atob(configParam);
+                const state = JSON.parse(decodedData);
+                
+                console.log('Configuration trouvée dans l\'URL, version:', state.v || 'inconnue');
+                
+                // Restaurer les offres
+                if (state.offres) {
+                    restoreOffres(state.offres);
+                    // Mettre à jour nextOffreId
+                    const maxId = Math.max(...state.offres.map(o => parseInt(o.id) || 0));
+                    nextOffreId = maxId + 1;
+                }
+                
+                // Restaurer les paramètres
+                if (state.params) {
+                    restoreParams(state.params);
+                }
+                
+                // Afficher un message de confirmation
+                setTimeout(() => {
+                    if (confirm('Configuration chargée depuis le lien de partage. Voulez-vous sauvegarder localement cette configuration ?')) {
+                        saveToLocalStorage();
+                    }
+                }, 1000);
+                
+                // Nettoyer l'URL (optionnel)
+                if (history.replaceState) {
+                    history.replaceState(null, '', window.location.pathname);
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Erreur lors du chargement depuis l\'URL:', error);
+                alert('Le lien de partage semble corrompu ou incompatible.');
+                return false;
+            }
+        }
+
+        // === FONCTIONS DE PERSISTANCE LOCALE ===
         
         // Sauvegarder l'état actuel dans localStorage
         function saveToLocalStorage() {
@@ -610,7 +779,7 @@
             try {
                 const savedState = localStorage.getItem('tenex_simulator_state');
                 if (!savedState) {
-                    console.log('Aucune sauvegarde trouvée, utilisation des valeurs par défaut');
+                    console.log('Aucune sauvegarde locale trouvée');
                     return false;
                 }
 
@@ -637,10 +806,10 @@
                     nextOffreId = state.nextOffreId;
                 }
                 
-                console.log('État restauré depuis la sauvegarde du', new Date(state.lastSaved).toLocaleString('fr-FR'));
+                console.log('État restauré depuis localStorage du', new Date(state.lastSaved).toLocaleString('fr-FR'));
                 return true;
             } catch (error) {
-                console.error('Erreur lors du chargement:', error);
+                console.error('Erreur lors du chargement local:', error);
                 return false;
             }
         }
@@ -1098,7 +1267,7 @@
         function exportData() {
             const data = {
                 date: new Date().toISOString(),
-                version: '1.1',
+                version: '1.2',
                 etat_complet: {
                     offres: getOffresActives(),
                     params: getAllParams(),
@@ -1157,16 +1326,21 @@
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
-            // Charger l'état sauvegardé ou utiliser les valeurs par défaut
-            const loaded = loadFromLocalStorage();
+            // 1. D'abord essayer de charger depuis l'URL (priorité)
+            const loadedFromURL = loadFromURL();
             
-            if (loaded) {
-                console.log('✅ Données restaurées depuis la sauvegarde automatique');
-            } else {
-                console.log('ℹ️ Démarrage avec les valeurs par défaut');
+            // 2. Si pas de données dans l'URL, essayer localStorage
+            if (!loadedFromURL) {
+                const loadedFromLocal = loadFromLocalStorage();
+                
+                if (loadedFromLocal) {
+                    console.log('✅ Données restaurées depuis localStorage');
+                } else {
+                    console.log('ℹ️ Démarrage avec les valeurs par défaut');
+                }
             }
             
-            // Lancer les calculs initiaux
+            // 3. Lancer les calculs initiaux
             updateCalculations();
         });
 
