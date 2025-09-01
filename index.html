@@ -230,6 +230,14 @@
             color: #721c24;
         }
 
+        .starter-calculated {
+            background: #fff3cd;
+            padding: 5px;
+            text-align: right;
+            font-weight: 600;
+            color: #856404;
+        }
+
         .charts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -352,25 +360,33 @@
         }
 
         .marketing-table {
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .marketing-table input {
-            width: 80px;
-            padding: 5px;
-            font-size: 11px;
+            width: 60px;
+            padding: 4px;
+            font-size: 10px;
         }
 
         .marketing-table .calculated-cell {
             background: #fdf2e0;
             color: #856404;
-            font-size: 11px;
+            font-size: 10px;
         }
 
         .compact-input {
-            width: 70px !important;
+            width: 60px !important;
             padding: 4px !important;
-            font-size: 11px !important;
+            font-size: 10px !important;
+        }
+
+        .budget-override {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
         }
 
         @media (max-width: 768px) {
@@ -484,18 +500,19 @@
                 <button class="btn btn-primary" onclick="ajouterOffre()">➕ Ajouter une offre</button>
             </div>
 
-            <!-- NOUVELLE SECTION MARKETING AVANCÉ -->
+            <!-- SECTION MARKETING AMÉLIORÉE -->
             <div class="section marketing">
-                <h3>🎯 Campagnes Marketing & Leviers d'Acquisition</h3>
-                <div class="alert alert-warning">
-                    <strong>🚀 Nouveau :</strong> Gérez vos campagnes marketing avec des métriques détaillées (impressions, clics, conversions, ROI...). Les métriques calculées automatiquement s'intègrent dans votre simulation globale.
+                <h3>🎯 Campagnes Marketing & Funnel d'Acquisition</h3>
+                <div class="alert alert-success">
+                    <strong>🚀 Nouveau funnel :</strong> <strong>Leads → Clients Starters (gratuits) → Clients Payants</strong><br>
+                    Les revenus sont maintenant calculés uniquement sur les conversions payantes réelles.
                 </div>
                 
                 <div style="overflow-x: auto;">
                     <table class="table marketing marketing-table">
                         <thead>
                             <tr>
-                                <th>Campagne / Levier</th>
+                                <th>Campagne</th>
                                 <th>Budget (€/mois)</th>
                                 <th>Impressions</th>
                                 <th>Clics</th>
@@ -503,8 +520,10 @@
                                 <th>Visites</th>
                                 <th>Leads</th>
                                 <th>CPL (€)</th>
-                                <th>Abonnements</th>
-                                <th>Inscriptions</th>
+                                <th>Clients Starters</th>
+                                <th>Taux Lead→Start (%)</th>
+                                <th>Clients Payants</th>
+                                <th>Taux Start→Pay (%)</th>
                                 <th>CAC (€)</th>
                                 <th>Revenus (€/mois)</th>
                                 <th>ROI (%)</th>
@@ -521,11 +540,13 @@
                                 <td><input type="number" value="4500" id="visites_campagne_1" class="compact-input" onchange="updateMarketingCalculations()"></td>
                                 <td><input type="number" value="450" id="leads_campagne_1" class="compact-input" onchange="updateMarketingCalculations()"></td>
                                 <td><span class="marketing-calculated" id="cpl_campagne_1">€6.67</span></td>
-                                <td><input type="number" value="54" id="abonnements_campagne_1" class="compact-input" onchange="updateMarketingCalculations()"></td>
-                                <td><input type="number" value="45" id="inscriptions_campagne_1" class="compact-input" onchange="updateMarketingCalculations()"></td>
-                                <td><span class="marketing-calculated" id="cac_campagne_1">€66.67</span></td>
-                                <td><span class="marketing-calculated" id="revenus_campagne_1">€7425</span></td>
-                                <td><span class="marketing-calculated" id="roi_campagne_1">147.5%</span></td>
+                                <td><input type="number" value="135" id="starters_campagne_1" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                                <td><span class="starter-calculated" id="taux_lead_start_1">30.0%</span></td>
+                                <td><input type="number" value="27" id="payants_campagne_1" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                                <td><span class="starter-calculated" id="taux_start_pay_1">20.0%</span></td>
+                                <td><span class="marketing-calculated" id="cac_campagne_1">€111.11</span></td>
+                                <td><span class="marketing-calculated" id="revenus_campagne_1">€3726</span></td>
+                                <td><span class="marketing-calculated" id="roi_campagne_1">24.2%</span></td>
                                 <td><button class="btn btn-danger btn-sm" onclick="supprimerCampagne(1)">🗑️</button></td>
                             </tr>
                             <tr>
@@ -537,11 +558,13 @@
                                 <td><input type="number" value="3600" id="visites_campagne_2" class="compact-input" onchange="updateMarketingCalculations()"></td>
                                 <td><input type="number" value="288" id="leads_campagne_2" class="compact-input" onchange="updateMarketingCalculations()"></td>
                                 <td><span class="marketing-calculated" id="cpl_campagne_2">€6.94</span></td>
-                                <td><input type="number" value="29" id="abonnements_campagne_2" class="compact-input" onchange="updateMarketingCalculations()"></td>
-                                <td><input type="number" value="25" id="inscriptions_campagne_2" class="compact-input" onchange="updateMarketingCalculations()"></td>
-                                <td><span class="marketing-calculated" id="cac_campagne_2">€80.00</span></td>
-                                <td><span class="marketing-calculated" id="revenus_campagne_2">€4117</span></td>
-                                <td><span class="marketing-calculated" id="roi_campagne_2">105.8%</span></td>
+                                <td><input type="number" value="86" id="starters_campagne_2" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                                <td><span class="starter-calculated" id="taux_lead_start_2">29.9%</span></td>
+                                <td><input type="number" value="17" id="payants_campagne_2" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                                <td><span class="starter-calculated" id="taux_start_pay_2">19.8%</span></td>
+                                <td><span class="marketing-calculated" id="cac_campagne_2">€117.65</span></td>
+                                <td><span class="marketing-calculated" id="revenus_campagne_2">€2346</span></td>
+                                <td><span class="marketing-calculated" id="roi_campagne_2">17.3%</span></td>
                                 <td><button class="btn btn-danger btn-sm" onclick="supprimerCampagne(2)">🗑️</button></td>
                             </tr>
                             <tr>
@@ -553,11 +576,13 @@
                                 <td><input type="number" value="1350" id="visites_campagne_3" class="compact-input" onchange="updateMarketingCalculations()"></td>
                                 <td><input type="number" value="203" id="leads_campagne_3" class="compact-input" onchange="updateMarketingCalculations()"></td>
                                 <td><span class="marketing-calculated" id="cpl_campagne_3">€7.39</span></td>
-                                <td><input type="number" value="20" id="abonnements_campagne_3" class="compact-input" onchange="updateMarketingCalculations()"></td>
-                                <td><input type="number" value="18" id="inscriptions_campagne_3" class="compact-input" onchange="updateMarketingCalculations()"></td>
-                                <td><span class="marketing-calculated" id="cac_campagne_3">€83.33</span></td>
-                                <td><span class="marketing-calculated" id="revenus_campagne_3">€2598</span></td>
-                                <td><span class="marketing-calculated" id="roi_campagne_3">73.2%</span></td>
+                                <td><input type="number" value="61" id="starters_campagne_3" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                                <td><span class="starter-calculated" id="taux_lead_start_3">30.0%</span></td>
+                                <td><input type="number" value="12" id="payants_campagne_3" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                                <td><span class="starter-calculated" id="taux_start_pay_3">19.7%</span></td>
+                                <td><span class="marketing-calculated" id="cac_campagne_3">€125.00</span></td>
+                                <td><span class="marketing-calculated" id="revenus_campagne_3">€1656</span></td>
+                                <td><span class="marketing-calculated" id="roi_campagne_3">10.4%</span></td>
                                 <td><button class="btn btn-danger btn-sm" onclick="supprimerCampagne(3)">🗑️</button></td>
                             </tr>
                         </tbody>
@@ -570,10 +595,11 @@
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
                         <div><strong>Budget total:</strong> <span id="total_budget_marketing">€6,500</span></div>
                         <div><strong>Total leads:</strong> <span id="total_leads_marketing">941</span></div>
-                        <div><strong>Total abonnements:</strong> <span id="total_abonnements_marketing">103</span></div>
-                        <div><strong>CAC moyen:</strong> <span id="cac_moyen_marketing">€63.11</span></div>
-                        <div><strong>Total revenus:</strong> <span id="total_revenus_marketing">€14,140</span></div>
-                        <div><strong>ROI global:</strong> <span id="roi_global_marketing">117.5%</span></div>
+                        <div><strong>Total starters:</strong> <span id="total_starters_marketing">282</span></div>
+                        <div><strong>Total payants:</strong> <span id="total_payants_marketing">56</span></div>
+                        <div><strong>CAC moyen:</strong> <span id="cac_moyen_marketing">€116.07</span></div>
+                        <div><strong>Total revenus:</strong> <span id="total_revenus_marketing">€7,728</span></div>
+                        <div><strong>ROI global:</strong> <span id="roi_global_marketing">18.9%</span></div>
                     </div>
                 </div>
             </div>
@@ -586,16 +612,43 @@
                         <input type="number" id="churn_mensuel" value="5" step="0.1" onchange="updateCalculations()">
                     </div>
                     <div class="form-group">
-                        <label>Taux de conversion leads → clients (%)</label>
-                        <input type="number" id="taux_conversion" value="12" step="0.1" onchange="updateCalculations()">
+                        <label>Taux de conversion leads → starters (%)</label>
+                        <input type="number" id="taux_leads_starters" value="30" step="0.1" onchange="updateMarketingCalculations()">
+                    </div>
+                    <div class="form-group">
+                        <label>Taux de conversion starters → payants (%)</label>
+                        <input type="number" id="taux_starters_payants" value="20" step="0.1" onchange="updateMarketingCalculations()">
                     </div>
                     <div class="form-group">
                         <label>Trésorerie de départ (€)</label>
                         <input type="number" id="tresorerie_depart" value="50000" onchange="updateCalculations()">
                     </div>
                 </div>
-                <div class="alert alert-info" style="margin-top: 15px;">
-                    <strong>ℹ️ Budget marketing automatique :</strong> Le budget marketing total est maintenant calculé automatiquement depuis vos campagnes ci-dessus (<span id="budget_auto_display">€6,500</span>/mois).
+
+                <!-- NOUVELLE SECTION BUDGET MARKETING MODULABLE -->
+                <div class="budget-override">
+                    <h4 style="color: #1976d2; margin-bottom: 15px;">💼 Budget Marketing Mensuel</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: center;">
+                        <div>
+                            <label style="display: block; margin-bottom: 5px;">Mode budget:</label>
+                            <select id="budget_mode" onchange="toggleBudgetMode()" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
+                                <option value="auto">Automatique (depuis campagnes)</option>
+                                <option value="manual">Manuel (override)</option>
+                            </select>
+                        </div>
+                        <div id="budget_manual_section" style="display: none;">
+                            <label style="display: block; margin-bottom: 5px;">Budget mensuel (€):</label>
+                            <input type="number" id="budget_marketing_manuel" value="6500" onchange="updateCalculations()" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd; width: 100%;">
+                        </div>
+                        <div>
+                            <strong>Budget appliqué:</strong> 
+                            <span id="budget_applique" style="color: #1976d2; font-size: 1.1em;">€6,500</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                        <strong>Mode automatique:</strong> Budget calculé depuis vos campagnes marketing ci-dessus<br>
+                        <strong>Mode manuel:</strong> Permet de définir un budget différent pour la simulation
+                    </div>
                 </div>
             </div>
 
@@ -739,7 +792,7 @@
         <!-- ONGLET SIMULATION -->
         <div class="tab-pane" id="simulation">
             <div class="alert alert-success">
-                <strong>✅ Calculs automatiques :</strong> Les données se mettent à jour en temps réel selon vos hypothèses et campagnes marketing.
+                <strong>✅ Calculs automatiques :</strong> Les données se mettent à jour en temps réel selon vos hypothèses et campagnes marketing avec le nouveau funnel starters.
             </div>
 
             <table class="table" id="simulationTable">
@@ -748,6 +801,7 @@
                         <th>Mois</th>
                         <th>Clients actifs</th>
                         <th>Nouveaux clients</th>
+                        <th>Clients starters</th>
                         <th>Clients perdus</th>
                         <th>MRR (€)</th>
                         <th>Budget Marketing (€)</th>
@@ -835,7 +889,31 @@
         let nextChargeId = { salaire: 6, outil: 6, frais: 5 };
         let nextCampagneId = 4; // Pour les nouvelles campagnes
 
-        // === FONCTIONS DE CAMPAGNES MARKETING ===
+        // === NOUVEAU: GESTION BUDGET MARKETING ===
+        function toggleBudgetMode() {
+            const mode = document.getElementById('budget_mode').value;
+            const manualSection = document.getElementById('budget_manual_section');
+            
+            if (mode === 'manual') {
+                manualSection.style.display = 'block';
+            } else {
+                manualSection.style.display = 'none';
+            }
+            
+            updateCalculations();
+        }
+
+        function getBudgetMarketingEffectif() {
+            const mode = document.getElementById('budget_mode').value;
+            
+            if (mode === 'manual') {
+                return parseFloat(document.getElementById('budget_marketing_manuel').value) || 0;
+            } else {
+                return calculateBudgetMarketingTotal(); // Calculé depuis les campagnes
+            }
+        }
+
+        // === FONCTIONS DE CAMPAGNES MARKETING AMÉLIORÉES ===
         
         // Ajouter une campagne
         function ajouterCampagne() {
@@ -852,11 +930,13 @@
                 <td><input type="number" value="900" id="visites_campagne_${id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
                 <td><input type="number" value="90" id="leads_campagne_${id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
                 <td><span class="marketing-calculated" id="cpl_campagne_${id}">€11.11</span></td>
-                <td><input type="number" value="11" id="abonnements_campagne_${id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
-                <td><input type="number" value="10" id="inscriptions_campagne_${id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
-                <td><span class="marketing-calculated" id="cac_campagne_${id}">€100.00</span></td>
-                <td><span class="marketing-calculated" id="revenus_campagne_${id}">€1500</span></td>
-                <td><span class="marketing-calculated" id="roi_campagne_${id}">50.0%</span></td>
+                <td><input type="number" value="27" id="starters_campagne_${id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                <td><span class="starter-calculated" id="taux_lead_start_${id}">30.0%</span></td>
+                <td><input type="number" value="5" id="payants_campagne_${id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                <td><span class="starter-calculated" id="taux_start_pay_${id}">18.5%</span></td>
+                <td><span class="marketing-calculated" id="cac_campagne_${id}">€200.00</span></td>
+                <td><span class="marketing-calculated" id="revenus_campagne_${id}">€690</span></td>
+                <td><span class="marketing-calculated" id="roi_campagne_${id}>-31.0%</span></td>
                 <td><button class="btn btn-danger btn-sm" onclick="supprimerCampagne(${id})">🗑️</button></td>
             `;
             updateMarketingCalculations();
@@ -869,7 +949,7 @@
             updateMarketingCalculations();
         }
 
-        // Récupérer les campagnes actives
+        // Récupérer les campagnes actives avec nouveau modèle
         function getCampagnesActives() {
             const campagnes = [];
             const table = document.getElementById('campagnesTable');
@@ -882,8 +962,8 @@
                 const clicsInput = rows[i].querySelector('input[id^="clics_campagne_"]');
                 const visitesInput = rows[i].querySelector('input[id^="visites_campagne_"]');
                 const leadsInput = rows[i].querySelector('input[id^="leads_campagne_"]');
-                const abonnementsInput = rows[i].querySelector('input[id^="abonnements_campagne_"]');
-                const inscriptionsInput = rows[i].querySelector('input[id^="inscriptions_campagne_"]');
+                const startersInput = rows[i].querySelector('input[id^="starters_campagne_"]');
+                const payantsInput = rows[i].querySelector('input[id^="payants_campagne_"]');
                 
                 if (nomInput && budgetInput) {
                     const id = nomInput.id.split('_').pop();
@@ -895,37 +975,46 @@
                         clics: parseInt(clicsInput.value) || 0,
                         visites: parseInt(visitesInput.value) || 0,
                         leads: parseInt(leadsInput.value) || 0,
-                        abonnements: parseInt(abonnementsInput.value) || 0,
-                        inscriptions: parseInt(inscriptionsInput.value) || 0
+                        starters: parseInt(startersInput.value) || 0,
+                        payants: parseInt(payantsInput.value) || 0
                     });
                 }
             }
             return campagnes;
         }
 
-        // Calculer les métriques marketing pour une campagne
+        // Calculer les métriques marketing avec nouveau funnel
         function calculateCampagneMetrics(campagne) {
             const cpc = campagne.clics > 0 ? campagne.budget / campagne.clics : 0;
             const cpl = campagne.leads > 0 ? campagne.budget / campagne.leads : 0;
-            const cac = campagne.abonnements > 0 ? campagne.budget / campagne.abonnements : 0;
+            const cac = campagne.payants > 0 ? campagne.budget / campagne.payants : 0;
             
-            // Calculer les revenus estimés (ARPU moyen * abonnements)
+            // Taux de conversion
+            const tauxLeadStart = campagne.leads > 0 ? (campagne.starters / campagne.leads) * 100 : 0;
+            const tauxStartPay = campagne.starters > 0 ? (campagne.payants / campagne.starters) * 100 : 0;
+            
+            // Calculer les revenus estimés (ARPU moyen * clients payants)
             const arpuMoyen = calculateARPU();
-            const revenus = campagne.abonnements * arpuMoyen;
+            const revenus = campagne.payants * arpuMoyen;
             
             // ROI = ((Revenus - Coûts) / Coûts) * 100
             const roi = campagne.budget > 0 ? ((revenus - campagne.budget) / campagne.budget) * 100 : 0;
             
-            return { cpc, cpl, cac, revenus, roi };
+            return { cpc, cpl, cac, revenus, roi, tauxLeadStart, tauxStartPay };
         }
 
-        // Mettre à jour les calculs marketing
+        // Mettre à jour les calculs marketing avec nouveau funnel
         function updateMarketingCalculations() {
             const campagnes = getCampagnesActives();
             let totalBudget = 0;
             let totalLeads = 0;
-            let totalAbonnements = 0;
+            let totalStarters = 0;
+            let totalPayants = 0;
             let totalRevenus = 0;
+            
+            // Récupérer les taux globaux de conversion depuis les paramètres
+            const tauxGlobalLeadStart = parseFloat(document.getElementById('taux_leads_starters').value) || 30;
+            const tauxGlobalStartPay = parseFloat(document.getElementById('taux_starters_payants').value) || 20;
             
             campagnes.forEach(campagne => {
                 const metrics = calculateCampagneMetrics(campagne);
@@ -936,6 +1025,8 @@
                 const cacElement = document.getElementById(`cac_campagne_${campagne.id}`);
                 const revenusElement = document.getElementById(`revenus_campagne_${campagne.id}`);
                 const roiElement = document.getElementById(`roi_campagne_${campagne.id}`);
+                const tauxLeadStartElement = document.getElementById(`taux_lead_start_${campagne.id}`);
+                const tauxStartPayElement = document.getElementById(`taux_start_pay_${campagne.id}`);
                 
                 if (cpcElement) cpcElement.textContent = `€${metrics.cpc.toFixed(2)}`;
                 if (cplElement) cplElement.textContent = `€${metrics.cpl.toFixed(2)}`;
@@ -945,27 +1036,36 @@
                     roiElement.textContent = `${metrics.roi.toFixed(1)}%`;
                     roiElement.style.color = metrics.roi >= 0 ? '#28a745' : '#dc3545';
                 }
+                if (tauxLeadStartElement) {
+                    tauxLeadStartElement.textContent = `${metrics.tauxLeadStart.toFixed(1)}%`;
+                }
+                if (tauxStartPayElement) {
+                    tauxStartPayElement.textContent = `${metrics.tauxStartPay.toFixed(1)}%`;
+                }
                 
                 // Accumuler les totaux
                 totalBudget += campagne.budget;
                 totalLeads += campagne.leads;
-                totalAbonnements += campagne.abonnements;
+                totalStarters += campagne.starters;
+                totalPayants += campagne.payants;
                 totalRevenus += metrics.revenus;
             });
             
             // Mettre à jour les totaux marketing
-            const cacMoyen = totalAbonnements > 0 ? totalBudget / totalAbonnements : 0;
+            const cacMoyen = totalPayants > 0 ? totalBudget / totalPayants : 0;
             const roiGlobal = totalBudget > 0 ? ((totalRevenus - totalBudget) / totalBudget) * 100 : 0;
             
             document.getElementById('total_budget_marketing').textContent = `€${totalBudget.toLocaleString()}`;
             document.getElementById('total_leads_marketing').textContent = totalLeads.toLocaleString();
-            document.getElementById('total_abonnements_marketing').textContent = totalAbonnements.toLocaleString();
+            document.getElementById('total_starters_marketing').textContent = totalStarters.toLocaleString();
+            document.getElementById('total_payants_marketing').textContent = totalPayants.toLocaleString();
             document.getElementById('cac_moyen_marketing').textContent = `€${cacMoyen.toFixed(2)}`;
             document.getElementById('total_revenus_marketing').textContent = `€${totalRevenus.toLocaleString()}`;
             document.getElementById('roi_global_marketing').textContent = `${roiGlobal.toFixed(1)}%`;
             
-            // Mettre à jour l'affichage du budget automatique
-            document.getElementById('budget_auto_display').textContent = `€${totalBudget.toLocaleString()}`;
+            // Mettre à jour l'affichage du budget appliqué
+            const budgetEffectif = getBudgetMarketingEffectif();
+            document.getElementById('budget_applique').textContent = `€${budgetEffectif.toLocaleString()}`;
             
             // Déclencher la mise à jour des calculs globaux
             updateCalculations();
@@ -981,7 +1081,7 @@
                     charges: getAllCharges(),
                     campagnes: getCampagnesActives(), // Nouvelle section
                     params: getAllParams(),
-                    v: '2.0' // Version mise à jour
+                    v: '3.0' // Version mise à jour avec starters
                 };
                 
                 // Encoder en base64 pour l'URL
@@ -998,7 +1098,7 @@
                 // Scroll vers la section
                 document.getElementById('shareSection').scrollIntoView({ behavior: 'smooth' });
                 
-                console.log('Lien de partage généré avec campagnes marketing');
+                console.log('Lien de partage généré avec funnel starters');
             } catch (error) {
                 alert('Erreur lors de la génération du lien : ' + error.message);
                 console.error('Erreur génération lien:', error);
@@ -1103,7 +1203,7 @@
             }
         }
 
-        // Restaurer les campagnes
+        // Restaurer les campagnes avec nouveau modèle
         function restoreCampagnes(campagnes) {
             const table = document.getElementById('campagnesTable');
             table.innerHTML = '';
@@ -1119,8 +1219,10 @@
                     <td><input type="number" value="${campagne.visites}" id="visites_campagne_${campagne.id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
                     <td><input type="number" value="${campagne.leads}" id="leads_campagne_${campagne.id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
                     <td><span class="marketing-calculated" id="cpl_campagne_${campagne.id}">€0.00</span></td>
-                    <td><input type="number" value="${campagne.abonnements}" id="abonnements_campagne_${campagne.id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
-                    <td><input type="number" value="${campagne.inscriptions}" id="inscriptions_campagne_${campagne.id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                    <td><input type="number" value="${campagne.starters || 0}" id="starters_campagne_${campagne.id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                    <td><span class="starter-calculated" id="taux_lead_start_${campagne.id}">0.0%</span></td>
+                    <td><input type="number" value="${campagne.payants || 0}" id="payants_campagne_${campagne.id}" class="compact-input" onchange="updateMarketingCalculations()"></td>
+                    <td><span class="starter-calculated" id="taux_start_pay_${campagne.id}">0.0%</span></td>
                     <td><span class="marketing-calculated" id="cac_campagne_${campagne.id}">€0.00</span></td>
                     <td><span class="marketing-calculated" id="revenus_campagne_${campagne.id}">€0</span></td>
                     <td><span class="marketing-calculated" id="roi_campagne_${campagne.id}">0.0%</span></td>
@@ -1150,7 +1252,7 @@
                 // Afficher l'indicateur de sauvegarde
                 showAutoSaveIndicator();
                 
-                console.log('État sauvegardé automatiquement avec campagnes marketing');
+                console.log('État sauvegardé automatiquement avec funnel starters');
             } catch (error) {
                 console.error('Erreur lors de la sauvegarde:', error);
             }
@@ -1307,14 +1409,17 @@
             }
         }
 
-        // Récupérer tous les paramètres actuels
+        // Récupérer tous les paramètres actuels (avec nouveaux paramètres)
         function getAllParams() {
             return {
                 churn_mensuel: document.getElementById('churn_mensuel').value,
-                taux_conversion: document.getElementById('taux_conversion').value,
+                taux_leads_starters: document.getElementById('taux_leads_starters').value,
+                taux_starters_payants: document.getElementById('taux_starters_payants').value,
                 tresorerie_depart: document.getElementById('tresorerie_depart').value,
                 charges_sociales_pct: document.getElementById('charges_sociales_pct').value,
-                charges_variables_pct: document.getElementById('charges_variables_pct').value
+                charges_variables_pct: document.getElementById('charges_variables_pct').value,
+                budget_mode: document.getElementById('budget_mode').value,
+                budget_marketing_manuel: document.getElementById('budget_marketing_manuel').value
             };
         }
 
@@ -1326,6 +1431,11 @@
                     element.value = params[key];
                 }
             });
+            
+            // Déclencher toggleBudgetMode si nécessaire
+            if (params.budget_mode) {
+                toggleBudgetMode();
+            }
         }
 
         // Restaurer les offres
@@ -1520,7 +1630,19 @@
             return campagnes.reduce((total, campagne) => total + campagne.budget, 0);
         }
 
-        // Mettre à jour tous les calculs
+        // Calculer les nouveaux clients depuis les campagnes avec funnel starters
+        function calculateNouveauxClientsFromCampagnes() {
+            const campagnes = getCampagnesActives();
+            return campagnes.reduce((total, campagne) => total + campagne.payants, 0);
+        }
+
+        // Calculer les nouveaux starters depuis les campagnes
+        function calculateNouveauxStartersFromCampagnes() {
+            const campagnes = getCampagnesActives();
+            return campagnes.reduce((total, campagne) => total + campagne.starters, 0);
+        }
+
+        // Mettre à jour tous les calculs avec nouveau modèle
         function updateCalculations() {
             const offres = getOffresActives();
             
@@ -1532,8 +1654,7 @@
 
             const params = {
                 churnMensuel: parseFloat(document.getElementById('churn_mensuel').value) / 100 || 0.05,
-                budgetMarketing: calculateBudgetMarketingTotal(), // Calculé depuis les campagnes
-                tauxConversion: parseFloat(document.getElementById('taux_conversion').value) / 100 || 0.12,
+                budgetMarketing: getBudgetMarketingEffectif(), // Utilise la nouvelle fonction
                 tresorerieDepart: parseFloat(document.getElementById('tresorerie_depart').value) || 0,
                 chargesVariablesPct: parseFloat(document.getElementById('charges_variables_pct').value) / 100 || 0.15
             };
@@ -1547,6 +1668,10 @@
                 clientsParOffre[offre.id] = offre.clientsActuels;
             });
 
+            // Calculer les nouveaux clients depuis les campagnes par mois
+            const nouveauxClientsMarketing = calculateNouveauxClientsFromCampagnes();
+            const nouveauxStartersMarketing = calculateNouveauxStartersFromCampagnes();
+            
             for (let mois = 1; mois <= 12; mois++) {
                 let totalClientsActifs = 0;
                 let caMensuel = 0;
@@ -1557,10 +1682,15 @@
                     const clientsActuels = clientsParOffre[offre.id];
                     const clientsPerdus = Math.floor(clientsActuels * params.churnMensuel);
                     
+                    // Utiliser une croissance progressive basée sur les objectifs ET les campagnes
                     const croissanceNecessaire = (offre.objectif - offre.clientsActuels) / 12;
-                    const nouveauxClients = Math.max(0, Math.round(croissanceNecessaire + clientsPerdus));
+                    const nouveauxClientsBase = Math.max(0, Math.round(croissanceNecessaire + clientsPerdus));
                     
-                    clientsParOffre[offre.id] = clientsActuels + nouveauxClients - clientsPerdus;
+                    // Ajouter un boost depuis les campagnes marketing (répartis sur 12 mois)
+                    const boostMarketing = Math.round(nouveauxClientsMarketing / 12);
+                    const nouveauxClients = nouveauxClientsBase + boostMarketing;
+                    
+                    clientsParOffre[offre.id] = Math.max(0, clientsActuels + nouveauxClients - clientsPerdus);
                     totalClientsActifs += clientsParOffre[offre.id];
                     caMensuel += clientsParOffre[offre.id] * offre.prix;
                     nouveauxClientsTotal += nouveauxClients;
@@ -1573,9 +1703,13 @@
                 const resultatNet = caMensuel - chargesTotales;
                 tresorerie += resultatNet;
 
+                // Calculer les starters répartis sur 12 mois
+                const nouveauxStartersParMois = Math.round(nouveauxStartersMarketing / 12);
+
                 simulationData.push({
                     mois,
                     nouveauxClients: nouveauxClientsTotal,
+                    nouveauxStarters: nouveauxStartersParMois,
                     clientsPerdus: clientsPerdusTotal,
                     clientsActifs: totalClientsActifs,
                     mrr: caMensuel,
@@ -1594,7 +1728,7 @@
             saveToLocalStorage();
         }
 
-        // Mettre à jour le tableau de simulation
+        // Mettre à jour le tableau de simulation avec nouvelle colonne starters
         function updateSimulationTable() {
             const tbody = document.getElementById('simulationBody');
             tbody.innerHTML = '';
@@ -1605,6 +1739,7 @@
                     <td><strong>M${data.mois}</strong></td>
                     <td class="calculated-cell">${data.clientsActifs}</td>
                     <td class="calculated-cell" style="color: #28a745">+${data.nouveauxClients}</td>
+                    <td class="starter-calculated">+${data.nouveauxStarters}</td>
                     <td class="calculated-cell" style="color: #dc3545">-${data.clientsPerdus}</td>
                     <td class="calculated-cell">€${data.mrr.toLocaleString()}</td>
                     <td class="marketing-calculated">€${data.budgetMarketing.toLocaleString()}</td>
@@ -1620,20 +1755,20 @@
             });
         }
 
-        // Mettre à jour les KPI
+        // Mettre à jour les KPI avec nouvelles métriques
         function updateKPI() {
             if (simulationData.length === 0) return;
 
             const dernierMois = simulationData[simulationData.length - 1];
-            const budgetMarketing = calculateBudgetMarketingTotal();
+            const budgetMarketing = getBudgetMarketingEffectif();
 
             document.getElementById('kpi_mrr').textContent = `€${dernierMois.mrr.toLocaleString()}`;
             document.getElementById('kpi_arr').textContent = `€${(dernierMois.mrr * 12).toLocaleString()}`;
 
-            // CAC depuis les campagnes marketing
+            // CAC depuis les campagnes marketing avec nouveau funnel
             const campagnes = getCampagnesActives();
-            const totalAbonnements = campagnes.reduce((sum, c) => sum + c.abonnements, 0);
-            const cacMarketing = totalAbonnements > 0 ? budgetMarketing / totalAbonnements : 0;
+            const totalPayants = campagnes.reduce((sum, c) => sum + c.payants, 0);
+            const cacMarketing = totalPayants > 0 ? budgetMarketing / totalPayants : 0;
             document.getElementById('kpi_cac').textContent = `€${cacMarketing.toFixed(0)}`;
 
             const churnMensuel = parseFloat(document.getElementById('churn_mensuel').value) / 100 || 0.05;
@@ -1649,7 +1784,7 @@
             document.getElementById('kpi_breakeven').textContent = breakEvenMois === -1 ? '12+' : breakEvenMois + 1;
         }
 
-        // Mettre à jour les graphiques
+        // Mettre à jour les graphiques (inchangé)
         function updateCharts() {
             if (simulationData.length === 0) return;
 
@@ -1771,7 +1906,7 @@
             });
         }
 
-        // Sauvegarde et export
+        // Sauvegarde et export (mise à jour avec starters)
         function sauvegarder() {
             const config = {
                 date: new Date().toLocaleString('fr-FR'),
@@ -1820,7 +1955,7 @@
         function exportData() {
             const data = {
                 date: new Date().toISOString(),
-                version: '2.0',
+                version: '3.0', // Version mise à jour
                 etat_complet: {
                     offres: getOffresActives(),
                     charges: getAllCharges(),
@@ -1834,12 +1969,12 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `tenex_simulation_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `tenex_simulation_v3_${new Date().toISOString().split('T')[0]}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            alert('📥 Export réussi !');
+            alert('📥 Export réussi avec funnel starters !');
         }
 
         function importData(event) {
@@ -1878,7 +2013,7 @@
                     
                     updateMarketingCalculations();
                     updateCalculations();
-                    alert('📤 Import réussi !');
+                    alert('📤 Import réussi avec support starters !');
                 } catch (error) {
                     alert('❌ Erreur lors de l\'import: ' + error.message);
                 }
